@@ -86,6 +86,9 @@
 		title: function() {
 			return this.title;
 		},
+		url: function() {
+			return $(this).attr('url');
+		},
 		createImg: function() {
 			var img = new Image();
 			var attrs = $(this).data('cbox-img-attrs');
@@ -149,13 +152,14 @@
 	$loadingBay,
 	$loadingOverlay,
 	$title,
+	$url,
 	$current,
 	$slideshow,
 	$next,
 	$prev,
 	$close,
 	$groupControls,
-	$events = $('<a/>'), // $({}) would be preferred, but there is an issue with jQuery 1.4.2
+	$events = $('<a/>'), // $({}) would be prefered, but there is an issue with jQuery 1.4.2
 
 	// Variables for cached values or use across multiple functions
 	settings,
@@ -423,6 +427,8 @@
 				settings.get('onOpen');
 
 				$groupControls.add($title).hide();
+				
+				$groupControls.add($url).hide();
 
 				$box.focus();
 
@@ -481,6 +487,7 @@
 			$wrap = $tag(div, "Wrapper");
 			$content = $tag(div, "Content").append(
 				$title = $tag(div, "Title"),
+				$url = $tag(div, "URL"),
 				$current = $tag(div, "Current"),
 				$prev = $('<button type="button"/>').attr({id:prefix+'Previous'}),
 				$next = $('<button type="button"/>').attr({id:prefix+'Next'}),
@@ -836,6 +843,11 @@
 
 			$title.html(settings.get('title')).show();
 			$loaded.show();
+			
+			if (settings.get('url')) {
+				$url.html(settings.get('url')).show();
+				$loaded.show();
+			}
 
 			if (total > 1) { // handle grouping
 				if (typeof settings.get('current') === "string") {
@@ -982,7 +994,7 @@
 					return;
 				}
 
-				// A small pause because some browsers will occasionally report a
+				// A small pause because some browsers will occassionaly report a
 				// img.width and img.height of zero immediately after the img.onload fires
 				setTimeout(function(){
 					var percent;
